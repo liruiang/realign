@@ -31,6 +31,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
   
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Canvas Confetti for fireworks -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
   
   <style>
     :root {
@@ -128,14 +130,14 @@
       display: inline-flex; align-items: center; justify-content: center;
       padding: 1.25rem 3rem;
       font-weight: 600; font-size: 1.1rem;
-      background: var(--text-main);
-      color: var(--bg-white);
+      background: #0092D6;
+      color: #ffffff;
       border-radius: 12px;
       transition: all 0.2s ease;
       cursor: pointer; border: none;
       text-decoration: none;
     }
-    .btn:hover { background: #000; transform: translateY(-2px); color: var(--bg-white); }
+    .btn:hover { background: #082F49; transform: translateY(-2px); color: #fff; }
 
     .email-input {
       width: 100%;
@@ -225,6 +227,31 @@
       word-wrap: break-word;
     }
 
+    /* ---------- FLIP CARD STYLES (hero only) ---------- */
+    .flip-card-container {
+      perspective: 1200px;
+      width: 100%;
+      position: relative;
+    }
+    .flip-card-front,
+    .flip-card-back {
+      backface-visibility: hidden;
+      transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 100%;
+    }
+    .flip-card-back {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: rotateY(180deg);
+    }
+    .flip-card-container.flipped .flip-card-front {
+      transform: rotateY(180deg);
+    }
+    .flip-card-container.flipped .flip-card-back {
+      transform: rotateY(0deg);
+    }
+
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(20px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -250,6 +277,7 @@
 
   <main class="max-w-6xl mx-auto px-6 md:px-12">
     
+    <!-- Hero Section -->
     <section class="py-16 md:py-28 text-center">
       <div class="flex flex-col items-center mb-12">
         <h1 class="font-serif text-5xl md:text-8xl leading-tight mb-8">
@@ -265,22 +293,51 @@
         <img src="images/product_display.webp" alt="Realign Pillow Product" class="w-full h-auto object-contain rounded-3xl" width="1600" height="900" fetchpriority="high" decoding="async" sizes="(max-width: 768px) 100vw, 1200px"/>
       </div>
 
-      <div id="waitlist" class="max-w-3xl mx-auto bg-white p-8 md:p-12 rounded-[2.5rem] border border-gray-100 shadow-sm">
-        <form id="waitlistForm" action="#" method="POST" class="flex flex-col md:row items-center gap-4">
-          <input type="email" name="email" required placeholder="We respect your inbox, no spam, just updates" class="email-input" />
-          <button type="submit" class="btn w-full md:w-auto">Join the Waitlist</button>
-        </form>
-        <p id="waitlistFeedback" class="text-sm font-medium mt-4 hidden"></p>
-        
-        <div class="mt-8 pt-8 border-t border-gray-100 flex items-center justify-center gap-3">
-          <span class="w-2 h-2 rounded-full bg-brand-500 shadow-[0_0_10px_rgba(0,146,214,0.4)]"></span>
-          <p class="text-sm font-medium text-gray-600 uppercase tracking-widest">
-            <span id="supportersCount">...</span> early supporters are already waiting!
-          </p>
+      <!-- Hero waitlist form with flip card (input above button) -->
+      <div id="waitlist" class="max-w-3xl mx-auto">
+        <div class="flip-card-container" id="heroFlipContainer">
+          <!-- Front face: the form -->
+          <div class="flip-card-front bg-white p-8 md:p-12 rounded-[2.5rem] border border-gray-100 shadow-sm">
+            <form id="waitlistForm" action="#" method="POST" class="flex flex-col items-center gap-4">
+              <input type="email" name="email" required placeholder="We respect your inbox, no spam, just updates" class="email-input" />
+              <button type="submit" id="waitlistBtn" class="btn w-full transition-all duration-300 ease-out">
+                <span id="waitlistBtnText">Join the Waitlist</span>
+                <span id="waitlistBtnSpinner" class="hidden ml-2">
+                  <i class="fas fa-spinner fa-pulse"></i>
+                </span>
+              </button>
+            </form>
+            <p id="waitlistFeedback" class="text-sm font-medium mt-4 hidden"></p>
+            
+            <div class="mt-8 pt-8 border-t border-gray-100 flex items-center justify-center gap-3">
+              <span class="w-2 h-2 rounded-full bg-brand-500 shadow-[0_0_10px_rgba(0,146,214,0.4)]"></span>
+              <p class="text-sm font-medium text-gray-600 uppercase tracking-widest">
+                <span id="supportersCount">...</span> early supporters are already waiting!
+              </p>
+            </div>
+          </div>
+
+          <!-- Back face: thank you + Kickstarter CTA -->
+          <div class="flip-card-back bg-white p-8 md:p-12 rounded-[2.5rem] border border-gray-100 shadow-sm flex flex-col items-center justify-center text-center">
+            <div class="mb-6">
+              <svg class="w-16 h-16 text-brand-500 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <h3 class="font-serif text-2xl md:text-3xl text-slate-900 mb-3">You’re on the list!</h3>
+            <p class="text-gray-600 text-base md:text-lg mb-8 max-w-md">
+              We’ll let you know the moment we launch. Want to be one of the first backers and get early‑bird perks?
+            </p>
+            <a href="https://www.kickstarter.com/projects/realignpillow/realign-pillow-posture-protection-for-bed-phone-users"
+               target="_blank" rel="noopener noreferrer"
+               class="btn bg-brand-500 hover:bg-brand-900 text-white font-semibold py-4 px-10 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5">
+               Visit Kickstarter →
+            </a>
+            <p class="mt-6 text-sm text-gray-400">No spam, just launch updates.</p>
+          </div>
         </div>
       </div>
     </section>
 
+    <!-- Problem Section -->
     <section class="py-24 border-t border-gray-200">
       <div class="text-center mb-20 max-w-5xl mx-auto">
           <h2 class="font-serif text-4xl md:text-5xl mb-12 text-slate-900">The Problem</h2>
@@ -308,6 +365,7 @@
       </div>
     </section>
 
+    <!-- Solution Section -->
     <section class="pt-24 pb-12 text-center max-w-5xl mx-auto">
         <h2 class="font-serif text-4xl md:text-5xl mb-12 text-slate-900">The Solution</h2>
         <div class="w-full overflow-hidden rounded-[2.5rem] border border-gray-100 shadow-sm bg-white">
@@ -315,6 +373,7 @@
         </div>
     </section>
 
+    <!-- Feature Highlights -->
     <section class="py-12 max-w-5xl mx-auto">
       <div class="flex flex-col w-full rounded-[2.5rem] overflow-hidden bg-white border border-gray-100 shadow-sm mb-12 group transition-all duration-300 hover:shadow-md">
           <div class="w-full p-10 md:p-14 pb-0 flex flex-col items-center text-center z-10">
@@ -358,6 +417,7 @@
       <h4 id="tooltip-title"></h4>
     </div>
 
+    <!-- Comparison Table -->
     <section class="py-20 text-center border-t border-gray-200 relative">
       <div class="text-center mb-8 md:mb-12 px-6">
           <h2 class="font-serif text-4xl md:text-5xl mb-4 text-slate-900">Why Realign is the Ultimate Choice</h2>
@@ -369,6 +429,7 @@
       </div>
       <div class="relative overflow-x-auto no-scrollbar pt-2 pb-8 scroll-smooth">
           <table class="w-full text-left border-collapse min-w-[650px] md:min-w-[800px] mx-auto">
+              <!-- table content same as before -->
               <thead>
                   <tr>
                       <th class="w-1/4 md:w-1/5 p-3 md:p-6 bg-[#FDFBF7] md:bg-transparent sticky left-0 z-20"></th>
@@ -414,6 +475,7 @@
       </div>
     </section>
 
+    <!-- Beta Testing -->
     <section class="py-20 border-t border-gray-200">
       <h2 class="font-serif text-4xl mb-12 text-center">Beta Testing</h2>
       <div class="grid md:grid-cols-3 gap-12">
@@ -423,6 +485,7 @@
       </div>
     </section>
 
+    <!-- FAQ -->
     <section class="py-20 max-w-3xl mx-auto" id="faq">
       <h2 class="font-serif text-4xl md:text-5xl mb-12 text-center">Frequently Asked Questions</h2>
       <button class="faq-btn" data-faq><span>Will it fit a traditional pillowcase?</span> <i class="fas fa-plus text-xs"></i></button>
@@ -435,44 +498,47 @@
 
   </main>
 
+  <!-- Footer & bottom waitlist (pop-up version) -->
   <section class="w-full bg-[#EFECE6] border-t border-gray-100 py-24 mt-20 flex flex-col items-center text-center px-6">
     <h2 class="font-serif text-5xl mb-10">Secure your early bird pricing</h2>
     
     <div class="w-full max-w-xl bg-white p-3 rounded-2xl shadow-sm border border-gray-200">
       <form id="waitlistFormBottom" action="#" method="POST" class="flex flex-col md:flex-row gap-3 w-full">
         <input type="email" name="email" required placeholder="Join the waitlist now" class="flex-1 px-6 py-4 rounded-xl text-gray-900 border-none outline-none text-base" />
-        <button type="submit" class="btn bg-[#1A1A1A] text-white hover:bg-black py-4 px-10 rounded-xl">Join the Waitlist</button>
+        <button type="submit" id="waitlistBtnBottom" class="btn bg-brand-500 hover:bg-brand-900 text-white py-4 px-10 rounded-xl transition-all duration-300 ease-out">
+          <span id="waitlistBtnTextBottom">Join the Waitlist</span>
+          <span id="waitlistBtnSpinnerBottom" class="hidden ml-2">
+            <i class="fas fa-spinner fa-pulse"></i>
+          </span>
+        </button>
       </form>
+      <p id="waitlistFeedbackBottom" class="text-sm font-medium hidden mt-4"></p>
     </div>
-    <p id="waitlistFeedbackBottom" class="text-sm font-medium hidden mt-6"></p>
     
     <div class="mt-16 pt-8 border-t border-gray-200 w-full max-w-4xl">
       <p class="text-sm font-medium text-gray-400 tracking-widest uppercase">&copy; 2026 Realign Pillow. All rights reserved.</p>
     </div>
   </section>
 
-  <!-- Kickstarter reminder popup -->
-  <div id="kickstarterModal" class="fixed inset-0 z-[9999] items-center justify-center hidden bg-black/50 backdrop-blur-sm">
+  <!-- Thank-you popup for bottom form -->
+  <div id="bottomThankYouModal" class="fixed inset-0 z-[9999] items-center justify-center hidden bg-black/50 backdrop-blur-sm">
     <div class="bg-white rounded-3xl p-8 max-w-md mx-4 shadow-2xl text-center animate-fade-in relative">
-      <button id="closeKickstarterModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors" aria-label="Close popup">
+      <button id="closeBottomModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors" aria-label="Close popup">
         <i class="fas fa-times text-xl"></i>
       </button>
-
-      <div class="text-5xl mb-4">🚀</div>
-      <h3 class="font-serif text-2xl md:text-3xl text-slate-900 mb-3">You're almost there!</h3>
-      <p class="text-gray-600 text-base md:text-lg mb-4">
-        One last step to secure your <strong class="text-brand-500">50% off</strong> on Kickstarter.
+      <div class="mb-6">
+        <svg class="w-16 h-16 text-brand-500 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      </div>
+      <h3 class="font-serif text-2xl md:text-3xl text-slate-900 mb-3">You’re on the list!</h3>
+      <p class="text-gray-600 text-base md:text-lg mb-8 max-w-md">
+        We’ll let you know the moment we launch. Want to be one of the first backers and get early‑bird perks?
       </p>
-      
-      <a href="https://www.kickstarter.com/projects/realignpillow/realign-pillow-posture-protection-for-bed-phone-users" 
-         target="_blank" rel="noopener noreferrer" 
-         class="btn bg-brand-500 hover:bg-brand-900 text-white font-semibold py-4 px-10 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 inline-block mt-4">
+      <a href="https://www.kickstarter.com/projects/realignpillow/realign-pillow-posture-protection-for-bed-phone-users"
+         target="_blank" rel="noopener noreferrer"
+         class="btn bg-brand-500 hover:bg-brand-900 text-white font-semibold py-4 px-10 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5 inline-block">
          Visit Kickstarter →
       </a>
-      
-      <button id="closeKickstarterModalFooter" class="mt-4 block w-full text-center text-sm text-gray-400 underline hover:text-gray-600 transition-colors">
-        Maybe later
-      </button>
+      <p class="mt-6 text-sm text-gray-400">No spam, just launch updates.</p>
     </div>
   </div>
 
@@ -497,45 +563,8 @@
       fetchCount();
       setInterval(fetchCount, 60000);
 
-      const kickstarterModal = document.getElementById('kickstarterModal');
-      const closeButtons = document.querySelectorAll('#closeKickstarterModal, #closeKickstarterModalFooter');
-
-      function showKickstarterModal() {
-        kickstarterModal.classList.remove('hidden');
-        kickstarterModal.classList.add('flex');
-      }
-
-      function hideKickstarterModal() {
-        kickstarterModal.classList.add('hidden');
-        kickstarterModal.classList.remove('flex');
-      }
-
-      closeButtons.forEach(btn => btn.addEventListener('click', hideKickstarterModal));
-
-      kickstarterModal.addEventListener('click', function(e) {
-        if (e.target === kickstarterModal) hideKickstarterModal();
-      });
-
-      // ---------- SMART FORM SUBMISSION (1500ms delay + guaranteed delivery) ----------
-      function queueEmailForRetry(email) {
-        let queue = [];
-        try {
-          queue = JSON.parse(localStorage.getItem('waitlistQueue') || '[]');
-        } catch (e) {}
-        queue.push(email);
-        localStorage.setItem('waitlistQueue', JSON.stringify(queue));
-      }
-
-      function removeQueuedEmail(email) {
-        let queue = [];
-        try {
-          queue = JSON.parse(localStorage.getItem('waitlistQueue') || '[]');
-        } catch (e) {}
-        const filtered = queue.filter(e => e !== email);
-        localStorage.setItem('waitlistQueue', JSON.stringify(filtered));
-      }
-
-      async function sendEmailToServer(email, feedback, btn) {
+      // ---------- HELPER: send email to Google Sheet ----------
+      async function sendEmailToSheet(email) {
         try {
           const formData = new URLSearchParams();
           formData.append('email', email);
@@ -543,70 +572,128 @@
           const data = await res.json();
           if (data.status === "success") {
             fetchCount();
-            removeQueuedEmail(email);
             return true;
-          } else {
-            throw new Error(data.message || 'Server error');
           }
-        } catch (err) {
-          queueEmailForRetry(email);
-          return false;
+        } catch (err) {}
+        let queue = JSON.parse(localStorage.getItem('waitlistQueue') || '[]');
+        if (!queue.includes(email)) {
+          queue.push(email);
+          localStorage.setItem('waitlistQueue', JSON.stringify(queue));
         }
+        return false;
       }
 
-      function handleFormSubmit(form, feedback, btn) {
-        const email = form.querySelector('input').value.trim();
+      // ---------- CONFETTI ----------
+      function launchConfetti() {
+        confetti({
+          particleCount: 150,
+          spread: 100,
+          origin: { y: 0.6 }
+        });
+        setTimeout(() => {
+          confetti({
+            particleCount: 80,
+            angle: 60,
+            spread: 70,
+            origin: { x: 0, y: 0.7 }
+          });
+        }, 200);
+        setTimeout(() => {
+          confetti({
+            particleCount: 80,
+            angle: 120,
+            spread: 70,
+            origin: { x: 1, y: 0.7 }
+          });
+        }, 400);
+      }
+
+      // ---------- HERO WAITLIST FORM (flip card) ----------
+      const heroForm = document.getElementById('waitlistForm');
+      const heroFlipContainer = document.getElementById('heroFlipContainer');
+      const heroBtn = document.getElementById('waitlistBtn');
+      const heroBtnText = document.getElementById('waitlistBtnText');
+      const heroBtnSpinner = document.getElementById('waitlistBtnSpinner');
+
+      heroForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const email = heroForm.querySelector('input[type="email"]').value.trim();
         if (!email) return;
 
-        // Show success message immediately
-        feedback.textContent = 'Success! You are on the waitlist.';
-        feedback.style.color = '#0092D6';
-        feedback.style.display = 'block';
-        form.reset();
-        btn.disabled = false;
+        heroBtn.disabled = true;
+        heroBtnText.textContent = 'Joining…';
+        heroBtnSpinner.classList.remove('hidden');
+        heroBtn.classList.add('scale-95', 'bg-green-500');
+        setTimeout(() => heroBtn.classList.remove('scale-95'), 150);
 
-        // Send in background
-        sendEmailToServer(email, feedback, btn);
+        sendEmailToSheet(email);
 
-        // Show Kickstarter popup after 1500ms
-        setTimeout(showKickstarterModal, 1500);
-      }
-
-      document.querySelectorAll('form').forEach(form => {
-        form.addEventListener('submit', function (e) {
-          e.preventDefault();
-          const feedback = form.id === 'waitlistFormBottom' 
-            ? document.getElementById('waitlistFeedbackBottom') 
-            : document.getElementById('waitlistFeedback');
-          const btn = this.querySelector('button');
-          if (!feedback) {
-            console.error('Feedback element missing for form:', form.id);
-            return;
-          }
-          btn.disabled = true;
-          handleFormSubmit(this, feedback, btn);
-        });
+        setTimeout(() => {
+          heroFlipContainer.classList.add('flipped');
+          launchConfetti();
+          heroBtn.disabled = false;
+          heroBtnText.textContent = 'Join the Waitlist';
+          heroBtnSpinner.classList.add('hidden');
+          heroBtn.classList.remove('bg-green-500');
+        }, 1200);
       });
 
-      // On page load, retry any queued emails
-      async function flushQueuedEmails() {
-        let queue = [];
-        try {
-          queue = JSON.parse(localStorage.getItem('waitlistQueue') || '[]');
-        } catch (e) {}
-        if (queue.length === 0) return;
+      // ---------- BOTTOM WAITLIST FORM (popup) ----------
+      const bottomForm = document.getElementById('waitlistFormBottom');
+      const bottomBtn = document.getElementById('waitlistBtnBottom');
+      const bottomBtnText = document.getElementById('waitlistBtnTextBottom');
+      const bottomBtnSpinner = document.getElementById('waitlistBtnSpinnerBottom');
+      const bottomModal = document.getElementById('bottomThankYouModal');
+      const closeBottomModal = document.getElementById('closeBottomModal');
 
+      bottomForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const email = bottomForm.querySelector('input[type="email"]').value.trim();
+        if (!email) return;
+
+        bottomBtn.disabled = true;
+        bottomBtnText.textContent = 'Joining…';
+        bottomBtnSpinner.classList.remove('hidden');
+        bottomBtn.classList.add('scale-95', 'bg-green-500');
+        setTimeout(() => bottomBtn.classList.remove('scale-95'), 150);
+
+        sendEmailToSheet(email);
+
+        setTimeout(() => {
+          bottomModal.classList.remove('hidden');
+          bottomModal.classList.add('flex');
+          launchConfetti();
+          bottomBtn.disabled = false;
+          bottomBtnText.textContent = 'Join the Waitlist';
+          bottomBtnSpinner.classList.add('hidden');
+          bottomBtn.classList.remove('bg-green-500');
+        }, 1200);
+      });
+
+      closeBottomModal.addEventListener('click', () => {
+        bottomModal.classList.add('hidden');
+        bottomModal.classList.remove('flex');
+      });
+
+      bottomModal.addEventListener('click', function(e) {
+        if (e.target === bottomModal) {
+          bottomModal.classList.add('hidden');
+          bottomModal.classList.remove('flex');
+        }
+      });
+
+      // Retry queued emails on page load
+      async function flushQueue() {
+        let queue = JSON.parse(localStorage.getItem('waitlistQueue') || '[]');
+        if (!queue.length) return;
         const remaining = [];
         for (const email of queue) {
-          const success = await sendEmailToServer(email);
-          if (!success) {
-            remaining.push(email);
-          }
+          const success = await sendEmailToSheet(email);
+          if (!success) remaining.push(email);
         }
         localStorage.setItem('waitlistQueue', JSON.stringify(remaining));
       }
-
-      flushQueuedEmails();
+      flushQueue();
 
       // FAQ toggle
       const faqBtns = document.querySelectorAll('[data-faq]');
@@ -638,30 +725,24 @@
       const triggers = document.querySelectorAll('.hotspot-trigger');
       const tooltip = document.getElementById('tooltip');
       const tooltipTitle = document.getElementById('tooltip-title');
-
       triggers.forEach(trigger => {
         trigger.addEventListener('click', function(e) {
           e.stopPropagation();
-
           tooltipTitle.textContent = this.getAttribute('data-title');
-
           const rect = this.getBoundingClientRect();
           const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
           const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
           const dotCenterX = rect.left + scrollLeft + (rect.width / 2);
           const dotCenterY = rect.top + scrollTop + (rect.height / 2);
-
           tooltip.style.left = dotCenterX + 'px';
           tooltip.style.top = dotCenterY + 'px';
-
           tooltip.classList.add('active');
         });
       });
-
       document.addEventListener('click', () => {
         tooltip.classList.remove('active');
       });
+
     })();
   </script>
 </body>
