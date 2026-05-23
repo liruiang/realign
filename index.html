@@ -637,6 +637,11 @@
           heroBtnText.textContent = 'Join the Waitlist';
           heroBtnSpinner.classList.add('hidden');
           heroBtn.classList.remove('bg-green-500');
+          
+          // Meta Pixel Track Lead Event
+          if (typeof fbq === 'function') {
+            fbq('track', 'Lead');
+          }
         }, 1200);
       });
 
@@ -669,6 +674,11 @@
           bottomBtnText.textContent = 'Join the Waitlist';
           bottomBtnSpinner.classList.add('hidden');
           bottomBtn.classList.remove('bg-green-500');
+          
+          // Meta Pixel Track Lead Event
+          if (typeof fbq === 'function') {
+            fbq('track', 'Lead');
+          }
         }, 1200);
       });
 
