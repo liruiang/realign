@@ -31,7 +31,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
   
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Canvas Confetti for fireworks -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
   
   <style>
@@ -261,7 +260,23 @@
       animation: fadeInUp 0.35s ease-out forwards;
     }
   </style>
-</head>
+
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '4954400841458863');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=4954400841458863&ev=PageView&noscript=1"
+  /></noscript>
+  </head>
 <body>
 
   <nav class="nav-bar">
@@ -277,7 +292,6 @@
 
   <main class="max-w-6xl mx-auto px-6 md:px-12">
     
-    <!-- Hero Section -->
     <section class="py-16 md:py-28 text-center">
       <div class="flex flex-col items-center mb-12">
         <h1 class="font-serif text-5xl md:text-8xl leading-tight mb-8">
@@ -293,10 +307,8 @@
         <img src="images/product_display.webp" alt="Realign Pillow Product" class="w-full h-auto object-contain rounded-3xl" width="1600" height="900" fetchpriority="high" decoding="async" sizes="(max-width: 768px) 100vw, 1200px"/>
       </div>
 
-      <!-- Hero waitlist form with flip card (input above button) -->
       <div id="waitlist" class="max-w-3xl mx-auto">
         <div class="flip-card-container" id="heroFlipContainer">
-          <!-- Front face: the form -->
           <div class="flip-card-front bg-white p-8 md:p-12 rounded-[2.5rem] border border-gray-100 shadow-sm">
             <form id="waitlistForm" action="#" method="POST" class="flex flex-col items-center gap-4">
               <input type="email" name="email" required placeholder="We respect your inbox, no spam, just updates" class="email-input" />
@@ -317,7 +329,6 @@
             </div>
           </div>
 
-          <!-- Back face: thank you + Kickstarter CTA -->
           <div class="flip-card-back bg-white p-8 md:p-12 rounded-[2.5rem] border border-gray-100 shadow-sm flex flex-col items-center justify-center text-center">
             <div class="mb-6">
               <svg class="w-16 h-16 text-brand-500 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -337,7 +348,6 @@
       </div>
     </section>
 
-    <!-- Problem Section -->
     <section class="py-24 border-t border-gray-200">
       <div class="text-center mb-20 max-w-5xl mx-auto">
           <h2 class="font-serif text-4xl md:text-5xl mb-12 text-slate-900">The Problem</h2>
@@ -365,7 +375,6 @@
       </div>
     </section>
 
-    <!-- Solution Section -->
     <section class="pt-24 pb-12 text-center max-w-5xl mx-auto">
         <h2 class="font-serif text-4xl md:text-5xl mb-12 text-slate-900">The Solution</h2>
         <div class="w-full overflow-hidden rounded-[2.5rem] border border-gray-100 shadow-sm bg-white">
@@ -373,7 +382,6 @@
         </div>
     </section>
 
-    <!-- Feature Highlights -->
     <section class="py-12 max-w-5xl mx-auto">
       <div class="flex flex-col w-full rounded-[2.5rem] overflow-hidden bg-white border border-gray-100 shadow-sm mb-12 group transition-all duration-300 hover:shadow-md">
           <div class="w-full p-10 md:p-14 pb-0 flex flex-col items-center text-center z-10">
@@ -417,7 +425,6 @@
       <h4 id="tooltip-title"></h4>
     </div>
 
-    <!-- Comparison Table -->
     <section class="py-20 text-center border-t border-gray-200 relative">
       <div class="text-center mb-8 md:mb-12 px-6">
           <h2 class="font-serif text-4xl md:text-5xl mb-4 text-slate-900">Why Realign is the Ultimate Choice</h2>
@@ -429,7 +436,6 @@
       </div>
       <div class="relative overflow-x-auto no-scrollbar pt-2 pb-8 scroll-smooth">
           <table class="w-full text-left border-collapse min-w-[650px] md:min-w-[800px] mx-auto">
-              <!-- table content same as before -->
               <thead>
                   <tr>
                       <th class="w-1/4 md:w-1/5 p-3 md:p-6 bg-[#FDFBF7] md:bg-transparent sticky left-0 z-20"></th>
@@ -475,7 +481,6 @@
       </div>
     </section>
 
-    <!-- Beta Testing -->
     <section class="py-20 border-t border-gray-200">
       <h2 class="font-serif text-4xl mb-12 text-center">Beta Testing</h2>
       <div class="grid md:grid-cols-3 gap-12">
@@ -485,7 +490,6 @@
       </div>
     </section>
 
-    <!-- FAQ -->
     <section class="py-20 max-w-3xl mx-auto" id="faq">
       <h2 class="font-serif text-4xl md:text-5xl mb-12 text-center">Frequently Asked Questions</h2>
       <button class="faq-btn" data-faq><span>Will it fit a traditional pillowcase?</span> <i class="fas fa-plus text-xs"></i></button>
@@ -498,7 +502,6 @@
 
   </main>
 
-  <!-- Footer & bottom waitlist (pop-up version) -->
   <section class="w-full bg-[#EFECE6] border-t border-gray-100 py-24 mt-20 flex flex-col items-center text-center px-6">
     <h2 class="font-serif text-5xl mb-10">Secure your early bird pricing</h2>
     
@@ -520,7 +523,6 @@
     </div>
   </section>
 
-  <!-- Thank-you popup for bottom form -->
   <div id="bottomThankYouModal" class="fixed inset-0 z-[9999] items-center justify-center hidden bg-black/50 backdrop-blur-sm">
     <div class="bg-white rounded-3xl p-8 max-w-md mx-4 shadow-2xl text-center animate-fade-in relative">
       <button id="closeBottomModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors" aria-label="Close popup">
